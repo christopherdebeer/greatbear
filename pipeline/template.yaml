@@ -120,11 +120,7 @@ Resources:
                                 Capabilities: CAPABILITY_NAMED_IAM
                                 StackName: !Sub ${ApplicationName}-staging
                                 TemplatePath: Source::template.yml
-                                ParameterOverrides: !Sub |
-                                    {
-                                        "DeploymentBucketName": {"Fn::GetArtifactAtt": ["BuildOutput", "BucketName"]},
-                                        "DeploymentBucketKey": {"Fn::GetArtifactAtt": ["BuildOutput", "ObjectKey"]},
-                                    }
+                                ParameterOverrides: "{ \"DeploymentBucketName\" : { \"Fn::GetArtifactAtt\" : [\"Built\", \"BucketName\"]}, \"DeploymentBucketKey\" : { \"Fn::GetArtifactAtt\" : [\"Built\", \"ObjectKey\"]} }"
     CodeBuild:
         Type: AWS::CodeBuild::Project
         Properties:
