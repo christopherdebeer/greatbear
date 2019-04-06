@@ -17,6 +17,7 @@ Resources:
         Key: !Ref DeploymentBucketKey
     Events:
       GetResource:
+        RestApiId: !Ref MyApi
         Type: Api
         Properties:
           Path: /
