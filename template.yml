@@ -16,13 +16,30 @@ Resources:
         Bucket: !Ref DeploymentBucketName
         Key: !Ref DeploymentBucketKey
     Events:
-      GET:
+      GetResource:
         Type: Api
         Properties:
           Path: /
           Method: get
-
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: test
+      EndpointConfiguration: REGIONAL
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          title: "TestAPI"
+        paths:
+          /:
+            get:
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloWorldFunction.Arn}/invocations
+                responses: {}
+                httpMethod: "GET"
+                type: "aws_proxy"
 Outputs:
   ApiURL:
     Description: "API endpoint URL for Prod environment"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/resource/"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/resource/"
