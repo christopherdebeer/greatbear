@@ -16,8 +16,13 @@ Resources:
         Bucket: !Ref DeploymentBucketName
         Key: !Ref DeploymentBucketKey
     Events:
-      GetResource:
+      GET:
         Type: Api
         Properties:
           Path: /
           Method: get
+
+Outputs:
+  ApiURL:
+    Description: "API endpoint URL for Prod environment"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/resource/"
