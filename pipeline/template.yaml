@@ -100,6 +100,30 @@ Resources:
                                 - Name: Built
                             Configuration: 
                                 ProjectName: !Ref CodeBuild
+                -
+                    Name: Staging
+                    Actions:
+                        - 
+                            Name: DeployLambda
+                            RunOrder: 1
+                            InputArtifacts:
+                                - Name: Built
+                            ActionTypeId:
+                                Category: Deploy
+                                Owner: AWS
+                                Version: 1
+                                Provider: CloudFormation
+                            Configuration:
+                                ActionMode: REPLACE_ON_FAILURE
+                                RoleArn: !Sub ${CodePipelineCloudFormationRole.Arn}
+                                Capabilities: CAPABILITY_NAMED_IAM
+                                StackName: !Sub ${ApplicationName}-staging
+                                TemplatePath: Source::template.yml
+                                ParameterOverrides: !Sub |
+                                    {
+                                        "DeploymentBucketName": {"Fn::GetArtifactAtt": ["BuildOutput", "BucketName"]},
+                                        "DeploymentBucketKey": {"Fn::GetArtifactAtt": ["BuildOutput", "ObjectKey"]},
+                                    }
     CodeBuild:
         Type: AWS::CodeBuild::Project
         Properties:
