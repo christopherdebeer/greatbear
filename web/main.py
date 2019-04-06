@@ -1,13 +1,17 @@
-from fastapi import FastAPI
+from starlette.applications import Starlette
+from starlette.templating import Jinja2Templates
+from starlette.staticfiles import StaticFiles
+import uvicorn
 
-app = FastAPI()
+templates = Jinja2Templates(directory='templates')
+
+app = Starlette(debug=True)
+app.mount('/static', StaticFiles(directory='web/statics'), name='static')
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.route('/')
+async def homepage(request):
+    return templates.TemplateResponse('index.html', {'request': request})
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=8000)
