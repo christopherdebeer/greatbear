@@ -5,7 +5,7 @@ Parameters:
     ApplicationName: 
         Description: This will be used to name the pipeline and build resources
         Type: String
-        AllowedPattern: '[A-Za-z0-9-]+'
+        AllowedPattern: '[a-z0-9-]+'
 
     GitHubOAuthToken: 
         Description: Create a token with 'repo' and 'admin:repo_hook' permissions here https://github.com/settings/tokens
@@ -57,7 +57,7 @@ Resources:
     DeploymentBucket:
         Type: AWS::S3::Bucket
         Properties:
-            BucketName: !Join [ '-', [ !Ref ApplicationName, 'Deployment']]
+            BucketName: !Join [ '-', [ !Ref ApplicationName, 'deployment']]
     CodePipeline:
         Type: AWS::CodePipeline::Pipeline
         Properties:
