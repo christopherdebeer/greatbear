@@ -1,5 +1,6 @@
 from mangum import Mangum
 from web.main import app
+import uvicorn
 
 handler = Mangum(app)
 

@@ -3,7 +3,7 @@ from starlette.templating import Jinja2Templates
 from starlette.staticfiles import StaticFiles
 import uvicorn
 
-templates = Jinja2Templates(directory='templates')
+templates = Jinja2Templates(directory='web/templates')
 
 app = Starlette(debug=True)
 app.mount('/static', StaticFiles(directory='web/statics'), name='static')
@@ -13,5 +13,4 @@ app.mount('/static', StaticFiles(directory='web/statics'), name='static')
 async def homepage(request):
     return templates.TemplateResponse('index.html', {'request': request})
 
-if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+
