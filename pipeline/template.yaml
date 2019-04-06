@@ -117,7 +117,7 @@ Resources:
                             Configuration:
                                 ActionMode: REPLACE_ON_FAILURE
                                 RoleArn: !Sub ${CodePipelineCloudFormationRole.Arn}
-                                Capabilities: CAPABILITY_NAMED_IAM
+                                Capabilities: 'CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND'
                                 StackName: !Sub ${ApplicationName}-staging
                                 TemplatePath: Source::template.yml
                                 ParameterOverrides: "{ \"DeploymentBucketName\" : { \"Fn::GetArtifactAtt\" : [\"Built\", \"BucketName\"]}, \"DeploymentBucketKey\" : { \"Fn::GetArtifactAtt\" : [\"Built\", \"ObjectKey\"]} }"
