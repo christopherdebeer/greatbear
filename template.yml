@@ -35,7 +35,7 @@ Resources:
   CognitoIdPool:
     Type: "AWS::Cognito::IdentityPool"
     Properties:
-      IdentityPoolName: !Join greatbearpoolid
+      IdentityPoolName: greatbearpoolid
       CognitoIdentityProviders: 
         -
           ClientId: !Ref CognitoUserPoolClient
