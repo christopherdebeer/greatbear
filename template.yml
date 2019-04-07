@@ -22,6 +22,25 @@ Resources:
         Properties:
           Path: /
           Method: get
+  CognitoUserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      UserPoolName: GreatBearUserPool
+  CognitoUserPoolClient:    
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+        ClientName: myApp
+        GenerateSecret: false
+        UserPoolId: !Ref CognitoUserPool
+  CognitoIdPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: !Ref AWS::StackName
+      CognitoIdentityProviders: 
+        -
+          ClientId: !Ref CognitoUserPoolClient
+          ProviderName: !GetAtt CognitoUserPool.ProviderName
+      AllowUnauthenticatedIdentities: false
   MyApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -40,6 +59,17 @@ Resources:
                 responses: {}
                 httpMethod: "POST"
                 type: "aws_proxy"
+        securityDefinitions:
+          myApiUsers:
+            type: "apiKey"
+            name: "Authorization"
+            in: "header"
+            x-amazon-apigateway-authtype: "cognito_user_pools"
+            x-amazon-apigateway-authorizer:
+              providerARNs:
+              - 
+                Fn::Sub: ${CognitoUserPool.Arn}
+              type: "cognito_user_pools"
 Outputs:
   ApiURL:
     Description: "API endpoint URL for Prod environment"
